@@ -320,8 +320,6 @@ class AutoCompleteTextFieldState<T> extends State<AutoCompleteTextField> {
                                   child: itemBuilder(context, suggestion),
                                   onTap: () {
                                     if (!mounted) {
-                                      textField.controller.dispose();
-                                      textField.focusNode.dispose();
                                       return;
                                     }
 
