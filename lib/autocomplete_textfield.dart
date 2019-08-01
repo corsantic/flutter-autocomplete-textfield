@@ -297,13 +297,6 @@ class AutoCompleteTextFieldState<T> extends State<AutoCompleteTextField> {
     updateOverlay(currentText);
   }
 
-  @override
-  void setState(fn) {
-    if (mounted) {
-      super.setState(fn);
-    }
-  }
-
   void updateOverlay([String query]) {
     if (listSuggestionsEntry == null) {
       final Size textFieldSize = (context.findRenderObject() as RenderBox).size;
@@ -326,6 +319,12 @@ class AutoCompleteTextFieldState<T> extends State<AutoCompleteTextField> {
                               child: new InkWell(
                                   child: itemBuilder(context, suggestion),
                                   onTap: () {
+                                    if (!mounted) {
+                                      textField.controller.dispose();
+                                      textField.focusNode.dispose();
+                                      return;
+                                    }
+
                                     setState(() {
                                       if (submitOnSuggestionTap) {
                                         String newText = suggestion.toString();
@@ -374,8 +373,12 @@ class AutoCompleteTextFieldState<T> extends State<AutoCompleteTextField> {
     // if we created our own focus node and controller, dispose of them
     // otherwise, let the caller dispose of their own instances
 
-    textField.focusNode.dispose();
-    textField.controller.dispose();
+    if (focusNode == null) {
+      textField.focusNode.dispose();
+    }
+    if (controller == null) {
+      textField.controller.dispose();
+    }
     super.dispose();
   }
 
