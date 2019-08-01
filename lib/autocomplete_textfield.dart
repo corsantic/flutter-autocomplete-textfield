@@ -373,12 +373,9 @@ class AutoCompleteTextFieldState<T> extends State<AutoCompleteTextField> {
   void dispose() {
     // if we created our own focus node and controller, dispose of them
     // otherwise, let the caller dispose of their own instances
-    if (focusNode == null) {
-      textField.focusNode.dispose();
-    }
-    if (controller == null) {
-      textField.controller.dispose();
-    }
+
+    textField.focusNode.dispose();
+    textField.controller.dispose();
     super.dispose();
   }
 
